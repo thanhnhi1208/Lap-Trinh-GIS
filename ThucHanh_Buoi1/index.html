@@ -1,0 +1,101 @@
+﻿
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="index.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+
+
+   
+</head>
+<body>
+    
+    <div id="map">
+
+    </div>
+
+    <script>
+
+
+        async function find() {
+            let countryname = document.getElementById("country").value;
+            if (countryname == "") {
+                document.getElementById("country").value = "Enter the valid country";
+
+            }
+            countryname = countryname.charAt(0).toUpperCase() + countryname.slice(1).toLowerCase();
+
+
+            console.log(countryname);
+            let response = await fetch("https://api.covid19api.com/summary");
+            let newdata = await response.json();
+
+
+            let array = (Object.values(newdata));
+            let countries = array[3];
+
+            let global = array[2];
+            console.log(global);
+            document.getElementById("NewConfirmed").innerText = global.NewConfirmed;
+            document.getElementById("NewDeaths").innerText = global.NewDeaths;
+            document.getElementById("NewRecovered").innerText = global.NewRecovered;
+            document.getElementById("TotalConfirmed").innerText = global.TotalConfirmed;
+            document.getElementById("TotalDeaths").innerText = global.TotalDeaths;
+            document.getElementById("TotalRecovered").innerText = global.TotalRecovered;
+            let i = 0;
+            while (i < countries.length) {
+
+                if (countries[i].Country == countryname) {
+                    document.getElementById("country").value = "";
+
+                    console.log("yes i clicked this ", countries[i].Country);
+
+                    document.getElementById("name").innerText = countries[i].Country;
+                    document.getElementById("cases").innerText = countries[i].TotalConfirmed;
+                    document.getElementById("deaths").innerText = countries[i].TotalDeaths;
+                    document.getElementById("date").innerText = countries[i].Date;
+                    document.getElementById("newrecovered").innerText = countries[i].NewRecovered;
+                    document.getElementById("totalconfirmed").innerText = countries[i].TotalConfirmed;
+                    document.getElementById("totalrecovered").innerText = countries[i].TotalRecovered;
+
+                    // console.log(countries[i].Country, countries[i].TotalConfirmed);
+
+
+                    break;
+
+                }
+                i++;
+            }
+
+            if (i == 190) {
+                document.getElementById("country").value = "";
+
+            }
+
+
+
+        }
+
+    </script>
+    <script>
+        let map;
+        function initMap() {
+
+            var options = {
+                zoom: 8,
+                center: { lat: -34.397, lng: 150.644 }
+                           }
+             map = new google.maps.Map(document.getElementById("map"), options);
+            console.log("hello world");
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHwyN7ePdVc011tPvO7ajCQ1qmL1iCJUw&callback=initMap&libraries=&v=weekly" async></script>
+
+
+
+</body>
+</html>
+
+
